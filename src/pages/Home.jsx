@@ -73,7 +73,11 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const { data } = await supabase.from('currencies').select('*');
+      const { data, error } = await supabase
+        .from('currencies')
+        .select('*')
+        .order('sort_order', { ascending: true, nullsFirst: false })
+        .order('id', { ascending: true });
       if (data) {
         const processed = data.map((item) => {
           let images = [];
@@ -95,6 +99,7 @@ export default function Home() {
         });
         setCurrencies(processed);
       }
+      if (error) console.error(error);
       setLoading(false);
     };
     fetchData();
