@@ -1,0 +1,66 @@
+/* Base Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove default Vite styles */
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+/* Selection Style */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: inherit;
+}
+
+/* Focus Visible */
+:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.5);
+  outline-offset: 2px;
+}
+
+/* Input/Button Reset */
+input, button, textarea, select {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Image Reset */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Link Reset */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Table Reset */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
