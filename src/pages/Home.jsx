@@ -15,8 +15,10 @@ import {
   ZoomOut,
   RotateCcw,
 } from 'lucide-react';
-import stafyBanner from '../assets/stafy_banner.svg';
-import forexBanner from '../assets/forex_erp_banner.svg';
+import stafyBanner from '../assets/stafy_banner.jpg';
+import forexBanner from '../assets/forex_erp_banner.jpg';
+import moneyone from '../assets/money1.png';
+import moneytwo from '../assets/money2.png';
 
 export default function Home() {
   const [currencies, setCurrencies] = useState([]);
@@ -45,12 +47,12 @@ export default function Home() {
         description: 'ชมรายละเอียดธนบัตรจากทั่วโลกด้วยรูปภาพคมชัดระดับมืออาชีพ',
       },
       {
-        src: 'https://images.unsplash.com/photo-1454166155302-ef4863c27e70?auto=format&fit=crop&w=1400&q=80',
+        src: moneyone,
         title: 'ระบบจัดการสะดวก',
         description: 'ค้นหา จัดหมวดหมู่ และจัดการข้อมูลสกุลเงินได้รวดเร็วไร้สะดุด',
       },
       {
-        src: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1400&q=80',
+        src: moneytwo,
         title: 'ทีมงานมืออาชีพ',
         description: 'ดูแลและอัปเดตฐานข้อมูลอย่างต่อเนื่องเพื่อความแม่นยำสูงสุด',
       },
