@@ -43,8 +43,8 @@ export default function Home() {
       },
       {
         src: stafyBanner,
-        title: 'ภาพความละเอียดสูง',
-        description: 'ชมรายละเอียดธนบัตรจากทั่วโลกด้วยรูปภาพคมชัดระดับมืออาชีพ',
+        title: 'HR - Solution',
+        description: 'แพลตฟอร์มสำหรับธุรกิจ SME',
       },
       {
         src: moneyone,
