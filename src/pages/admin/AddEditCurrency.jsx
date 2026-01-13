@@ -77,9 +77,18 @@ const currencyToThaiName = {
   UAH: 'ฮริฟเนียยูเครน',
 };
 
-const getFlagUrl = (countryCode) => {
-  if (!countryCode) return '';
-  return `https://flagcdn.com/w160/${countryCode.toLowerCase()}.png`;
+const getFlagUrl = (input) => {
+  if (!input) return '';
+  // If input is already a URL, return it directly
+  if (input.startsWith('http://') || input.startsWith('https://')) {
+    return input;
+  }
+  // Otherwise treat as ISO code
+  const lower = input.toLowerCase();
+  const parts = lower.split(/[^a-z]/).filter(Boolean);
+  const iso2Candidate = parts.find((part) => part.length === 2) || (lower.length >= 2 ? lower.slice(0, 2) : '');
+  if (iso2Candidate.length !== 2) return '';
+  return `https://flagcdn.com/w160/${iso2Candidate}.png`;
 };
 
 // Helper functions for edit mode
@@ -95,8 +104,11 @@ const parseBanknoteUrls = (banknoteUrl) => {
 
 const extractCountryCodeFromFlagUrl = (flagUrl) => {
   if (!flagUrl) return '';
+  // Check if it's a standard flagcdn URL
   const match = flagUrl.match(/flagcdn\.com\/w\d+\/([a-z]{2})\.png/i);
-  return match ? match[1].toLowerCase() : '';
+  if (match) return match[1].toUpperCase();
+  // Otherwise return the full URL as-is (custom flag)
+  return flagUrl;
 };
 
 const extractStoragePath = (url) => {
@@ -150,7 +162,7 @@ export default function AddEditCurrency() {
     setCode(upper);
     // Auto-suggest country code if we have a mapping
     if (currencyToCountry[upper]) {
-      setCountryCode(currencyToCountry[upper]);
+      setCountryCode(currencyToCountry[upper].toUpperCase());
     }
     // Auto-suggest Thai name if we have a mapping
     if (currencyToThaiName[upper]) {
@@ -317,9 +329,8 @@ export default function AddEditCurrency() {
                 onChange={e => handleCodeChange(e.target.value)} 
                 required 
                 placeholder="USD"
-                maxLength={3}
               />
-              <p className="text-xs text-slate-500">รหัส 3 ตัวอักษร เช่น USD, EUR, JPY (จะเติมรหัสประเทศให้อัตโนมัติ)</p>
+              <p className="text-xs text-slate-500">รองรับรหัสสกุลเงิน 3 ตัวหรือมากกว่า เช่น USD, EUR, SCOT (จะเติมรหัสประเทศให้อัตโนมัติเมื่อมีข้อมูล)</p>
             </div>
             
             <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 space-y-4 animate-fadeIn" style={{ animationDelay: '150ms' }}>
@@ -342,35 +353,37 @@ export default function AddEditCurrency() {
           <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 space-y-4 animate-fadeIn" style={{ animationDelay: '200ms' }}>
             <div className="flex items-center gap-3 text-green-400 mb-2">
               <Image size={20} />
-              <span className="font-medium">รหัสประเทศ (ISO Country Code)</span>
+              <span className="font-medium">รหัสประเทศ หรือ ลิงก์ธง</span>
             </div>
             <input 
               type="text" 
-              className="w-full bg-slate-900/50 border border-slate-600 rounded-xl p-4 text-white placeholder-slate-500 focus:outline-none focus:border-green-500 transition-all text-lg font-mono lowercase"
-              placeholder="us"
+              className="w-full bg-slate-900/50 border border-slate-600 rounded-xl p-4 text-white placeholder-slate-500 focus:outline-none focus:border-green-500 transition-all text-sm font-mono"
+              placeholder="GB-SCT หรือ https://example.com/flag.png"
               value={countryCode} 
-              onChange={e => setCountryCode(e.target.value.toLowerCase().slice(0, 2))} 
+              onChange={e => setCountryCode(e.target.value)} 
               required 
-              maxLength={2}
             />
+            <p className="text-xs text-slate-500">รองรับรหัส ISO เช่น GB-SCT หรือวาง URL รูปธงโดยตรง</p>
             {countryCode && (
               <div className="flex items-center gap-4 p-4 bg-slate-900/50 rounded-xl">
                 <img 
                   src={getFlagUrl(countryCode)} 
                   alt="Flag Preview" 
                   className="h-10 rounded border-2 border-slate-600" 
-                  onError={(e) => { e.target.style.display='none'; }}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 text-green-400 text-sm">
                     <CheckCircle2 size={16} />
                     <span>ตัวอย่างธงชาติ</span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">URL: {getFlagUrl(countryCode)}</p>
+                  <p className="text-xs text-slate-500 mt-1">URL สำหรับตัวอย่างธง: {getFlagUrl(countryCode)}</p>
                 </div>
               </div>
             )}
-            <p className="text-xs text-slate-500">รหัสประเทศ 2 ตัวอักษร เช่น us (อเมริกา), th (ไทย), jp (ญี่ปุ่น), eu (ยูโร)</p>
+            <p className="text-xs text-slate-500">หากเป็นรหัส ISO ระบบจะสร้าง URL ธงให้อัตโนมัติ หรือวางลิงก์รูปธงเองได้เลย</p>
           </div>
 
           {/* Banknote Upload */}
