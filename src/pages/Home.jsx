@@ -113,8 +113,7 @@ export default function Home() {
     );
   }, [currencies, searchTerm]);
 
-  const displayCurrencies = useMemo(() => filtered.slice(0, 30), [filtered]);
-  const hasMore = filtered.length > 30;
+  const displayCurrencies = filtered;
 
   const openModal = useCallback((images) => {
     setSelectedNotes(images);
@@ -412,12 +411,6 @@ export default function Home() {
                 );
               })}
             </div>
-
-            {hasMore && (
-              <div className="text-center text-xs text-slate-400">
-                มีอีก {filtered.length - 30} สกุลเงิน • ใช้การค้นหาเพื่อกรองให้ตรงใจ
-              </div>
-            )}
           </>
         )}
       </section>
